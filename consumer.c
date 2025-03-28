@@ -27,17 +27,16 @@ void *consume(void *arg) {
         sem_wait(full);
         sem_wait(mutex); //take lock
 
-        // Critical section
+        // CRITICAL
         int item = table->buffer[table->count - 1];
         printf("Consumer consumed: %d\n", item);
         table->buffer[table->count - 1] = 0;  // Optional: clear slot
         table->count--;
-
+        //END CRIT
+        
         sem_post(mutex); //release lock
         sem_post(empty); //signal empty
-
         
-        sleep(1);  // simulate consumption time
     }
     return NULL;
 }
@@ -73,7 +72,7 @@ int main() {
     pthread_create(&consumer_thread, NULL, consume, NULL);
     pthread_join(consumer_thread, NULL);
 
-    // Cleanup (not reached in infinite loop)
+    // Cleanup not reached in infinite loop
     munmap(table, sizeof(SharedTable));
     close(shm_fd);
 
