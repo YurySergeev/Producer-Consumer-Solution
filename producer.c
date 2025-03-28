@@ -24,7 +24,7 @@ sem_t *mutex, *empty, *full;
 void *produce(void *arg) {
     int item = 0;
     while (1) {
-        sleep(1);  // simulate production time
+        sleep(1);  //IMPORTANT IF YOU WANT TO BE ABLE TO SEE THE VALUES - otherwise threads are too fast to comprehend
         item++;
 
         sem_wait(empty);
