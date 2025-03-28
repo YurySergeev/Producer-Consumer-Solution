@@ -13,12 +13,12 @@
 // Shared structure
 typedef struct {
     int buffer[MAX_ITEMS];
-    int count; // current number of items on the table
+    int count; // number of items in the table
 } SharedTable;
 
 SharedTable *table;
 
-// Named semaphores
+//semaphores
 sem_t *mutex, *empty, *full;
 
 void *produce(void *arg) {
@@ -30,7 +30,7 @@ void *produce(void *arg) {
         sem_wait(empty);
         sem_wait(mutex);
 
-        // Critical section
+        //CRITICAL  
         table->buffer[table->count] = item;
         printf("Producer produced: %d\n", item);
         table->count++;
@@ -59,7 +59,7 @@ int main() {
     table->count = 0;
     memset(table->buffer, 0, sizeof(table->buffer));
 
-    // Open or create semaphores
+    //create semaphores
     mutex = sem_open("/mutex", O_CREAT, 0666, 1);
     empty = sem_open("/empty", O_CREAT, 0666, MAX_ITEMS);
     full  = sem_open("/full",  O_CREAT, 0666, 0);
@@ -74,7 +74,7 @@ int main() {
     pthread_create(&producer_thread, NULL, produce, NULL);
     pthread_join(producer_thread, NULL);
 
-    // Cleanup (will not be reached in infinite loop)
+    // Cleanup
     munmap(table, sizeof(SharedTable));
     close(shm_fd);
 
