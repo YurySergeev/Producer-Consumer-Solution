@@ -8,6 +8,6 @@ Mutual exclusion should be considered. We use threads in the producer program an
 
 Usage
 ====
-gcc producer.c -pthread -lrt -o producer
-gcc consumer.c -pthread -lrt -o consumer
+gcc producer.c -pthread -lrt -o producer.
+gcc consumer.c -pthread -lrt -o consumer.
 ./producer & ./consumer &
