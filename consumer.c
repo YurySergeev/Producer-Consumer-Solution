@@ -22,6 +22,7 @@ sem_t *mutex, *empty, *full;
 
 void *consume(void *arg) {
 
+    
     while (1) {
         sem_wait(full);
         sem_wait(mutex); //take lock
@@ -36,12 +37,15 @@ void *consume(void *arg) {
         sem_post(empty); //signal empty
 
         
-        sleep(5);  // simulate consumption time
+        sleep(1);  // simulate consumption time
     }
     return NULL;
 }
 
 int main() {
+
+    sleep(3); //Wait for Producer to start up and do everything it needs
+
     int shm_fd = shm_open(SHM_NAME, O_RDWR, 0666);
     if (shm_fd == -1) {
         perror("shm_open");
