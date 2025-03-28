@@ -12,18 +12,19 @@
 // Shared structure
 typedef struct {
     int buffer[MAX_ITEMS];
-    int count; // current number of items on the table
+    int count;  // number of items in table
 } SharedTable;
 
 SharedTable *table;
 
-// Named semaphores
+//semaphores
 sem_t *mutex, *empty, *full;
 
 void *consume(void *arg) {
+
     while (1) {
         sem_wait(full);
-        sem_wait(mutex);
+        sem_wait(mutex); //take lock
 
         // Critical section
         int item = table->buffer[table->count - 1];
@@ -31,10 +32,11 @@ void *consume(void *arg) {
         table->buffer[table->count - 1] = 0;  // Optional: clear slot
         table->count--;
 
-        sem_post(mutex);
-        sem_post(empty);
+        sem_post(mutex); //release lock
+        sem_post(empty); //signal empty
 
-        sleep(2);  // simulate consumption time
+        
+        sleep(5);  // simulate consumption time
     }
     return NULL;
 }
@@ -52,7 +54,7 @@ int main() {
         exit(1);
     }
 
-    // Open semaphores (they were already created by producer)
+    // Open semaphores that were created earlier by producer here
     mutex = sem_open("/mutex", 0);
     empty = sem_open("/empty", 0);
     full  = sem_open("/full",  0);
