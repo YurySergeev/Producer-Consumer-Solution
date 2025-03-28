@@ -5,7 +5,7 @@ The producer generates items and puts items onto the table. The consumer will pi
 When the table is complete, the producer will wait. When there are no items, the consumer will wait. We use semaphores to synchronize producer and consumer.  
 Mutual exclusion should be considered. We use threads in the producer program and consumer program. Shared memory is used for the “table”.
 
-=====
+
 Usage
 ====
 gcc producer.c -pthread -lrt -o producer
